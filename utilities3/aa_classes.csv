@@ -1,1 +1,7 @@
-../aa_classes.csv
+Aliphatic,Aromatic,Polar,Positive,Negative,Special
+Ala,Phe,Ser,Lys,Asp,Gly
+Val,Tyr,Thr,Arg,Glu,Pro
+Leu,Trp,Asn,,,
+Ile,His,Gln,,,
+Met,,,,,
+Cys,,,,,
