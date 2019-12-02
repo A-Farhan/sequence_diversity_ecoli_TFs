@@ -39,19 +39,39 @@ names(out) = tps
 prjp = unlist(out)
 prjp = round(-log10(prjp),3)
 
+## filter data
+sel = grep( pattern = 'le|ma|50000', x = names(prjp), value=T)
+prjp = prjp[sel]
+N = length(prjp)
+
 ## plotting
 svg(fp)
 par(mar=c(4.5,5,2,2))
-# colors
-cols <- colorblind[c(2,3,5,8)]
+
+# color for different categories
+cols <- rep( NA, N)
+for(i in 1:N){
+  is_le <- grepl( pattern = 'le_P', x = names(prjp)[i], ignore.case = F)
+  is_ab <- grepl( pattern = 'le_ab', x = names(prjp)[i], ignore.case = F)
+  is_ltee <- grepl( pattern = 'ltee', x = names(prjp)[i], ignore.case = F)
+  if(is_le)
+    cols[i] <- colorblind[2]
+  else if(is_ab) 
+    cols[i] <- colorblind[3]
+  else if(is_ltee)
+    cols[i] <- colorblind[5]
+  else
+    cols[i] <- colorblind[8]
+}
+
 barplot( height = prjp, space = 0, xlab = 'Projects', 
          ylab = expression(paste('-log'[10],'P')), xaxt = 'n', cex.lab = 1.5, 
-         col = cols[rep(1:4,c(5,7,1,4))] )
+         col = cols )
 # threshold line
 cut = -log10(mp)
 segments(x0 = -10,y0 = cut, x1 = 100, y1 = cut)
 # legend
-legend('topright', legend = c('LE','AR','LTEE','MA'), fill = cols, bty = 'n', cex = 1.2)
+legend('topright', legend = c('LE','AR','LTEE','MA'), fill = colorblind[c(2,3,5,8)], bty = 'n', cex = 1.2)
 dev.off()
 ## overall test b/w adaptive lab evolution and MA
 ma = prjp[ grep(pattern = 'ma', names(prjp))]
